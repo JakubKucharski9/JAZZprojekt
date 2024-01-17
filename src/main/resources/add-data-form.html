@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Data Form</title>
+</head>
+<body>
+
+<h2>Add Data</h2>
+
+<form th:action="@{/add-data}" th:object="${data}" method="post">
+  <label for="clientName">Client Name:</label>
+  <input type="text" id="clientName" name="clientName" th:field="*{clientName}" required>
+
+  <!-- Dodaj inne pola formularza zgodnie z Twoimi encjami -->
+
+  <button type="submit">Add Data</button>
+</form>
+
+</body>
+</html>
