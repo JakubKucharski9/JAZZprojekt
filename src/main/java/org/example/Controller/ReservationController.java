@@ -31,8 +31,8 @@ public class ReservationController {
 
     @PostMapping
     public ResponseEntity<Reservation> createReservation(@RequestBody Reservation reservation) {
-        reservationService.createReservation(reservation);
-        return ResponseEntity.status(HttpStatus.CREATED).body(reservation);
+        Reservation savedReservation= reservationService.createReservation(reservation);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedReservation);
     }
 
     @GetMapping("/byRoom/{roomId}")

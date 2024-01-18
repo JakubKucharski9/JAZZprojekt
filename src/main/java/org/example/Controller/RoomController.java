@@ -1,7 +1,9 @@
 package org.example.Controller;
 
+import lombok.RequiredArgsConstructor;
 import org.example.Repo.RoomRepository;
 import org.example.Room;
+import org.example.Service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,24 +14,24 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/rooms")
+@RequiredArgsConstructor
 public class RoomController {
-    @Autowired
-    private RoomRepository roomRepository;
+
+    private final RoomService roomService;
 
     @GetMapping
     public List<Room> getAllRooms() {
-        return roomRepository.findAll();
+        return roomService.getAllRooms();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Room> getRoomById(@PathVariable Long id) {
-        Optional<Room> room = roomRepository.findById(id);
-        return room.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public Room getRoomById(@PathVariable Long id) {
+        return roomService.getRoomById(id);
     }
 
     @PostMapping
     public ResponseEntity<Room> createRoom(@RequestBody Room room) {
-        Room savedRoom = roomRepository.save(room);
+        Room savedRoom = roomService.createRoom(room);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedRoom);
     }
 }

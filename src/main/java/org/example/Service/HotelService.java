@@ -21,7 +21,8 @@ public class HotelService {
         return hotelRepository.findById(id).stream().findFirst().orElse(null);
     }
 
-    public void createHotel(Hotel hotel) {
+    public Hotel createHotel(Hotel hotel) {
         hotelRepository.save(hotel);
+        return hotel;
     }
 }

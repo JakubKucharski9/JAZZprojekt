@@ -16,8 +16,9 @@ public class ReservationService {
 
     public Reservation getReservationById(Long id){return reservationRepository.findById(id).stream().findFirst().orElse(null);}
 
-    public void createReservation(Reservation reservation){
+    public Reservation createReservation(Reservation reservation){
         reservationRepository.save(reservation);
+        return reservation;
     }
 
     public List<Reservation> getReservationsByRoomId(Long roomId){
