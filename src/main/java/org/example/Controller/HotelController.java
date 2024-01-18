@@ -1,35 +1,34 @@
 package org.example.Controller;
 
+import lombok.RequiredArgsConstructor;
 import org.example.Hotel;
-import org.example.Repo.HotelRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.example.Service.HotelService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/hotels")
+@RequiredArgsConstructor
 public class HotelController {
-    @Autowired
-    private HotelRepository hotelRepository;
+
+    private final HotelService hotelService;
 
     @GetMapping
     public List<Hotel> getAllHotels() {
-        return hotelRepository.findAll();
+        return hotelService.getAllHotels();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Hotel> getHotelById(@PathVariable Long id) {
-        Optional<Hotel> hotel = hotelRepository.findById(id);
-        return hotel.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public Hotel getHotelById(@PathVariable Long id) {
+        return hotelService.getHotelById(id);
     }
 
     @PostMapping
     public ResponseEntity<Hotel> createHotel(@RequestBody Hotel hotel) {
-        Hotel savedHotel = hotelRepository.save(hotel);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedHotel);
+        hotelService.createHotel(hotel);
+        return ResponseEntity.status(HttpStatus.CREATED).body(hotel);
     }
 }

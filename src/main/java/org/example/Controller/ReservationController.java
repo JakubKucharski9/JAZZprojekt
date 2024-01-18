@@ -1,7 +1,9 @@
 package org.example.Controller;
 
+import lombok.RequiredArgsConstructor;
 import org.example.Repo.ReservationRepository;
 import org.example.Reservation;
+import org.example.Service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,29 +14,29 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/reservations")
+@RequiredArgsConstructor
 public class ReservationController {
-    @Autowired
-    private ReservationRepository reservationRepository;
+
+    private final ReservationService reservationService;
 
     @GetMapping
     public List<Reservation> getAllReservations() {
-        return reservationRepository.findAll();
+        return reservationService.getAllReservations();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Reservation> getReservationById(@PathVariable Long id) {
-        Optional<Reservation> reservation = reservationRepository.findById(id);
-        return reservation.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public Reservation getReservationById(@PathVariable Long id) {
+        return reservationService.getReservationById(id);
     }
 
     @PostMapping
     public ResponseEntity<Reservation> createReservation(@RequestBody Reservation reservation) {
-        Reservation savedReservation = reservationRepository.save(reservation);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedReservation);
+        reservationService.createReservation(reservation);
+        return ResponseEntity.status(HttpStatus.CREATED).body(reservation);
     }
 
     @GetMapping("/byRoom/{roomId}")
     public List<Reservation> getReservationsByRoomId(@PathVariable Long roomId) {
-        return reservationRepository.findByRoomId(roomId);
+        return reservationService.getReservationsByRoomId(roomId);
     }
 }
