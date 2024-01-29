@@ -1,38 +1,44 @@
 package org.example.Controller;
 
-import lombok.RequiredArgsConstructor;
-import org.example.Repo.RoomRepository;
-import org.example.Room;
+import org.example.Data.Room;
+import org.example.Dtos.RoomDTO;
+import org.example.Mappers.RoomMapper;
 import org.example.Service.RoomService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
-
 @RestController
 @RequestMapping("/api/rooms")
-@RequiredArgsConstructor
 public class RoomController {
 
     private final RoomService roomService;
+    private final RoomMapper roomMapper;
 
-    @GetMapping
-    public List<Room> getAllRooms() {
-        return roomService.getAllRooms();
-    }
-
-    @GetMapping("/{id}")
-    public Room getRoomById(@PathVariable Long id) {
-        return roomService.getRoomById(id);
+    public RoomController(RoomService roomService, RoomMapper roomMapper) {
+        this.roomService = roomService;
+        this.roomMapper = roomMapper;
     }
 
     @PostMapping
-    public ResponseEntity<Room> createRoom(@RequestBody Room room) {
-        Room savedRoom = roomService.createRoom(room);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedRoom);
+    public ResponseEntity<RoomDTO> createRoom(@RequestBody Room room) {
+        Room createdRoom = roomService.createRoom(room);
+        return ResponseEntity.ok(roomMapper.toDto(createdRoom));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<RoomDTO>> getAllRooms() {
+        List<Room> rooms = roomService.getAllRooms();
+        return ResponseEntity.ok(roomMapper.toDTOList(rooms));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<RoomDTO> getRoomById(@PathVariable Long id) {
+        Room room = roomService.getRoomById(id);
+        if (room != null) {
+            return ResponseEntity.ok(roomMapper.toDto(room));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
-

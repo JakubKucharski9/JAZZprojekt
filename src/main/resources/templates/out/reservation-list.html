@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservation List</title>
+</head>
+<body>
+
+<h2>Reservation List</h2>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Check-In Date</th>
+        <th>Check-Out Date</th>
+        <th>Room</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="reservation : ${reservations}">
+        <td th:text="${reservation.id}"></td>
+        <td th:text="${reservation.checkInDate}"></td>
+        <td th:text="${reservation.checkOutDate}"></td>
+        <td th:text="${reservation.room.number}"></td>
+        <td>
+            <a th:href="@{/reservations/{id}(id=${reservation.id})}">Details</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<a href="/reservations/form">Add New Reservation</a>
+
+</body>
+</html>

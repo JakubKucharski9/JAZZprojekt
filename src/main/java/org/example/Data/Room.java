@@ -1,4 +1,4 @@
-package org.example;
+package org.example.Data;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,12 +13,14 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Hotel {
+public class Room {
 
     @Id
     @GeneratedValue
     private Long id;
-    private String name;
-    private String address;
+    private String number;
+    private int capacity;
+    private double price;
+
 }
 

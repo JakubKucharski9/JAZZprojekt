@@ -2,7 +2,7 @@ package org.example.Service;
 
 
 import lombok.RequiredArgsConstructor;
-import org.example.Hotel;
+import org.example.Data.Hotel;
 import org.example.Repo.HotelRepository;
 import org.springframework.stereotype.Service;
 

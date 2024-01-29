@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Reservation System</title>
+</head>
+<body>
+<h1>Welcome to Hotel Reservation System</h1>
+
+<h2>Hotels</h2>
+<button onclick="getHotels()">Get All Hotels</button>
+<div id="hotels"></div>
+<h3>Add New Hotel</h3>
+<form id="hotelForm" onsubmit="addHotel(event)">
+    <label for="hotelName">Name:</label>
+    <input type="text" id="hotelName" required>
+    <label for="hotelAddress">Address:</label>
+    <input type="text" id="hotelAddress" required>
+    <button type="submit">Add Hotel</button>
+</form>
+
+<h2>Rooms</h2>
+<button onclick="getRooms()">Get All Rooms</button>
+<div id="rooms"></div>
+<h3>Add New Room</h3>
+<form id="roomForm" onsubmit="addRoom(event)">
+    <label for="roomNumber">Number:</label>
+    <input type="text" id="roomNumber" required>
+    <label for="roomCapacity">Capacity:</label>
+    <input type="number" id="roomCapacity" required>
+    <label for="roomPrice">Price:</label>
+    <input type="number" id="roomPrice" required step="0.01">
+    <button type="submit">Add Room</button>
+</form>
+
+<h2>Reservations</h2>
+<button onclick="getReservations()">Get All Reservations</button>
+<div id="reservations"></div>
+<h3>Add New Reservation</h3>
+<form id="reservationForm" onsubmit="addReservation(event)">
+    <label for="checkInDate">Check-In Date:</label>
+    <input type="date" id="checkInDate" required>
+    <label for="checkOutDate">Check-Out Date:</label>
+    <input type="date" id="checkOutDate" required>
+    <!-- Add room selection dropdown here -->
+    <button type="submit">Add Reservation</button>
+</form>
+
+<script>
+    function getHotels() {
+        fetch('/api/hotels')
+            .then(response => response.json())
+            .then(data => {
+                const hotelsDiv = document.getElementById('hotels');
+                hotelsDiv.innerHTML = JSON.stringify(data, null, 2);
+            });
+    }
+
+    function addHotel(event) {
+        event.preventDefault();
+        const hotelName = document.getElementById('hotelName').value;
+        const hotelAddress = document.getElementById('hotelAddress').value;
+
+        fetch('/api/hotels', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name: hotelName, address: hotelAddress }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                getHotels();
+                // Clear the form after adding a hotel
+                document.getElementById('hotelForm').reset();
+            });
+    }
+
+    function getRooms() {
+        fetch('/api/rooms')
+            .then(response => response.json())
+            .then(data => {
+                const roomsDiv = document.getElementById('rooms');
+                roomsDiv.innerHTML = JSON.stringify(data, null, 2);
+            });
+    }
+
+    function addRoom(event) {
+        event.preventDefault();
+        const roomNumber = document.getElementById('roomNumber').value;
+        const roomCapacity = document.getElementById('roomCapacity').value;
+        const roomPrice = document.getElementById('roomPrice').value;
+
+        fetch('/api/rooms', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ number: roomNumber, capacity: roomCapacity, price: roomPrice }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                getRooms();
+                // Clear the form after adding a room
+                document.getElementById('roomForm').reset();
+            });
+    }
+
+    function getReservations() {
+        fetch('/api/reservations')
+            .then(response => response.json())
+            .then(data => {
+                const reservationsDiv = document.getElementById('reservations');
+                reservationsDiv.innerHTML = JSON.stringify(data, null, 2);
+            });
+    }
+
+    function addReservation(event) {
+        event.preventDefault();
+        const checkInDate = document.getElementById('checkInDate').value;
+        const checkOutDate = document.getElementById('checkOutDate').value;
+        // Add logic to get selected room ID from the dropdown
+
+        fetch('/api/reservations', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ checkInDate: checkInDate, checkOutDate: checkOutDate, roomId: selectedRoomId }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                getReservations();
+                // Clear the form after adding a reservation
+                document.getElementById('reservationForm').reset();
+            });
+    }
+</script>
+</body>
+</html>

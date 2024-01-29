@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel List</title>
+</head>
+<body>
+
+<h2>Hotel List</h2>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Address</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="hotel : ${hotels}">
+        <td th:text="${hotel.id}"></td>
+        <td th:text="${hotel.name}"></td>
+        <td th:text="${hotel.address}"></td>
+        <td>
+            <a th:href="@{/hotels/{id}(id=${hotel.id})}">Details</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<a href="/hotels/form">Add New Hotel</a>
+
+</body>
+</html>

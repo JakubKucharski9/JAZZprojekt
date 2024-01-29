@@ -1,42 +1,47 @@
 package org.example.Controller;
 
-import lombok.RequiredArgsConstructor;
-import org.example.Repo.ReservationRepository;
-import org.example.Reservation;
+import org.example.Data.Reservation;
+import org.example.Dtos.ReservationDTO;
+import org.example.Mappers.ReservationMapper;
 import org.example.Service.ReservationService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/reservations")
-@RequiredArgsConstructor
 public class ReservationController {
 
     private final ReservationService reservationService;
 
+    private final ReservationMapper reservationMapper;
+
+    public ReservationController(ReservationService reservationService, ReservationMapper reservationMapper) {
+        this.reservationService = reservationService;
+        this.reservationMapper = reservationMapper;
+    }
+
+
+    @PostMapping
+    public ResponseEntity<ReservationDTO> createReservation(@RequestBody Reservation reservation) {
+        Reservation createdReservation = reservationService.createReservation(reservation);
+        return ResponseEntity.ok(reservationMapper.toDto(createdReservation));
+    }
+
     @GetMapping
-    public List<Reservation> getAllReservations() {
-        return reservationService.getAllReservations();
+    public ResponseEntity<List<ReservationDTO>> getAllReservations() {
+        List<Reservation> reservations = reservationService.getAllReservations();
+        return ResponseEntity.ok(reservationMapper.toDTOList(reservations));
     }
 
     @GetMapping("/{id}")
-    public Reservation getReservationById(@PathVariable Long id) {
-        return reservationService.getReservationById(id);
-    }
-
-    @PostMapping
-    public ResponseEntity<Reservation> createReservation(@RequestBody Reservation reservation) {
-        Reservation savedReservation= reservationService.createReservation(reservation);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedReservation);
-    }
-
-    @GetMapping("/byRoom/{roomId}")
-    public List<Reservation> getReservationsByRoomId(@PathVariable Long roomId) {
-        return reservationService.getReservationsByRoomId(roomId);
+    public ResponseEntity<ReservationDTO> getReservationById(@PathVariable Long id) {
+        Reservation reservation = reservationService.getReservationById(id);
+        if (reservation != null) {
+            return ResponseEntity.ok(reservationMapper.toDto(reservation));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

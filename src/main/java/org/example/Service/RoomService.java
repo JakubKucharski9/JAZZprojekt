@@ -2,7 +2,7 @@ package org.example.Service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.Repo.RoomRepository;
-import org.example.Room;
+import org.example.Data.Room;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,7 +1,5 @@
-package org.example;
+package org.example.Dtos;
 
-
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,21 +7,14 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
-@Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class Reservation {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@AllArgsConstructor
+public class ReservationDTO {
     private Long id;
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
-
-    @ManyToOne
-    @JoinColumn(name = "room_id")
-    private Room room;
+    private RoomDTO roomId;
 
 }
-

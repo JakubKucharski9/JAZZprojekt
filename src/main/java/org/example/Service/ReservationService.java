@@ -2,7 +2,7 @@ package org.example.Service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.Repo.ReservationRepository;
-import org.example.Reservation;
+import org.example.Data.Reservation;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
